@@ -17,20 +17,18 @@ const cookies = new Cookies();
 
 /* The above code is defining the URL's for the API calls. */
 
-// const urlGetUsers = "http://localhost:3001/api/users/getAllUsers";
-// const urlCreateUser = "http://localhost:3001/api/users/createUser";
-// const urlUpdateUser = "http://localhost:3001/api/users/updateUser";
-// const urlDeleteUser = "http://localhost:3001/api/users/deleteUser";
+const urlGetUsers = "http://localhost:3002/api/users/getAllUsers";
+const urlUpdateUser = "http://localhost:3002/api/users/updateUser";
 
-const urlGetUsers =
-  "https://vaccination-inventory-backend.herokuapp.com/api/users/getAllUsers";
+// const urlGetUsers =
+//   "https://vaccination-inventory-backend.herokuapp.com/api/users/getAllUsers";
 
-const urlCreateUser =
-  "https://vaccination-inventory-backend.herokuapp.com/api/users/createUser";
-const urlUpdateUser =
-  "https://vaccination-inventory-backend.herokuapp.com/api/users/updateUser";
-const urlDeleteUser =
-  "https://vaccination-inventory-backend.herokuapp.com/api/users/deleteUser";
+// const urlCreateUser =
+//   "https://vaccination-inventory-backend.herokuapp.com/api/users/createUser";
+// const urlUpdateUser =
+//   "https://vaccination-inventory-backend.herokuapp.com/api/users/updateUser";
+// const urlDeleteUser =
+//   "https://vaccination-inventory-backend.herokuapp.com/api/users/deleteUser";
 
 class Employee extends Component {
   /* Creating a state object */
@@ -41,12 +39,7 @@ class Employee extends Component {
     modalEliminar: false,
     form: {
       id: "",
-      identificationNumber: "",
-      firstName: "",
-      secondName: "",
-      paternalSurname: "",
-      maternalSurname: "",
-      email: "",
+
       tipoModal: "",
       bornDate: "",
       address: "",
@@ -59,7 +52,8 @@ class Employee extends Component {
   /* Making a GET request to the urlGetUsers endpoint for load all users. */
 
   peticionGet = () => {
-    delete this.state.form.id;
+    // delete this.state.form.id;
+
     axios
       .get(urlGetUsers)
       .then((response) => {
@@ -69,74 +63,13 @@ class Employee extends Component {
         console.log(error.message);
       });
   };
-  /* Checking if the string is valid, only char characters, not numbers or rare symbols. */
-
-  validString = (string) => {
-    const isValid = /^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]*$/.test(string);
-    return isValid;
-  };
-  /* Function for open the modal for insert a new user. */
-
-  peticionPost = async (event) => {
-    const validEmail = String(this.state.form.email)
-      .toLowerCase()
-      .match(
-        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-      );
-    /* Validate if email is valid with regex (check @ and . format) */
-
-    const validFirstName = this.validString(this.state.form.firstName);
-    const validSecondName = this.validString(this.state.form.secondName);
-    const validPaternalSurname = this.validString(
-      this.state.form.paternalSurname
-    );
-    const validMaternalSurname = this.validString(
-      this.state.form.maternalSurname
-    );
-    if (
-      !validFirstName ||
-      !validSecondName ||
-      !validPaternalSurname ||
-      !validMaternalSurname
-    ) {
-      alert("No se aceptan nombres con caracteres especiales ni números");
-      event.preventDefault();
-      return;
-    }
-
-    if (this.state.form.identificationNumber.length !== 10) {
-      alert("El número de cédula debe tener 10 dígitos");
-      event.preventDefault();
-      return;
-    }
-
-    if (!validEmail) {
-      alert("El correo no es válido");
-      event.preventDefault();
-      return;
-    }
-    /* If data has a correct format, do the http request to create user*/
-
-    await axios
-      .post(urlCreateUser, this.state.form)
-      .then((response) => {
-        this.modalInsertar();
-        this.peticionGet();
-      })
-      .catch((error) => {
-        console.log(error.message);
-      })
-      .finally(() => {
-        this.modalInsertar();
-      });
-  };
 
   /* Function for open the modal for update my information. */
   peticionPut = async (event) => {
     try {
       await axios
         .put(
-          urlUpdateUser + "/" + this.state.form.id,
+          urlUpdateUser + "/" + cookies.get("id"),
           //send id in params request
 
           this.state.form
@@ -152,18 +85,6 @@ class Employee extends Component {
     }
   };
   /* Function for open the modal for delete a user. */
-
-  peticionDelete = async () => {
-    await axios
-      .delete(urlDeleteUser + "/" + this.state.form.id)
-      .then((response) => {
-        this.setState({ modalEliminar: false });
-        this.peticionGet();
-      })
-      .catch((error) => {
-        console.log(error.message);
-      });
-  };
 
   /* Function for open or close the modal according to state. */
   modalInsertar = () => {
@@ -260,6 +181,8 @@ class Employee extends Component {
               <Table responsive striped bordered hover>
                 <thead>
                   <tr>
+                    <th>ID</th>
+                    <th>Identification number</th>
                     <th>First Name</th>
                     <th>Second Name</th>
                     <th>Paternal surname </th>
@@ -275,25 +198,23 @@ class Employee extends Component {
                 </thead>
                 <tbody>
                   {this.state.data.map((user, index) => {
-                    if (user.id === cookies.get("id")) {
-                      return (
-                        <tr key={index}>
-                          <td>{user.firstName}</td>
-                          <td>{user.secondName}</td>
-                          <td>{user.paternalSurname}</td>
-                          <td>{user.maternalSurname}</td>
-                          <td>{user.email}</td>
-                          <td>{user.bornDate}</td>
-                          <td>{user.address}</td>
-                          <td>{user.phone}</td>
-                          <td>{user.vaccinationState}</td>
-                          <td>{user.vaccineType}</td>
-                          <td>{user.dosesNumber}</td>
-                        </tr>
-                      );
-                    } else {
-                      return <div></div>;
-                    }
+                    return (
+                      <tr key={index}>
+                        <td>{user.id}</td>
+                        <td>{user.identificationNumber}</td>
+                        <td>{user.firstName}</td>
+                        <td>{user.secondName}</td>
+                        <td>{user.paternalSurname}</td>
+                        <td>{user.maternalSurname}</td>
+                        <td>{user.email}</td>
+                        <td>{user.bornDate}</td>
+                        <td>{user.address}</td>
+                        <td>{user.phone}</td>
+                        <td>{user.vaccinationState}</td>
+                        <td>{user.vaccineType}</td>
+                        <td>{user.dosesNumber}</td>
+                      </tr>
+                    );
                   })}
                 </tbody>
               </Table>
@@ -324,6 +245,19 @@ class Employee extends Component {
           <form onSubmit={this.peticionPost}>
             <ModalBody>
               <div className="form-group">
+                <br />
+                <label htmlFor="id">ID</label>
+                <input
+                  required
+                  className="form-control"
+                  type="string"
+                  name="id"
+                  id="id"
+                  readOnly
+                  onChange={this.handleModalChange}
+                  //validate required input
+                  value={form ? form.id : ""}
+                />
                 <br />
 
                 <label htmlFor="bornDate">Born date</label>
@@ -364,20 +298,6 @@ class Employee extends Component {
                 />
                 <br />
 
-                <div class="form-check form-switch">
-                  <label class="vaccinationState" for="flexSwitchCheckDefault">
-                    Vaccinated
-                  </label>
-                  <input
-                    class="form-check-input"
-                    type="checkbox"
-                    name="vaccinationState"
-                    id="vaccinationState"
-                    onChange={this.handleModalChange}
-                    value={form ? form.vaccinationState : ""}
-                  />
-                </div>
-
                 <br />
                 <label htmlFor="vaccineType">Vaccine type</label>
                 <input
@@ -405,7 +325,7 @@ class Employee extends Component {
             </ModalBody>
 
             <ModalFooter>
-              {this.state.tipoModal === "insertar" ? (
+              {this.state.tipoModal === "update" ? (
                 <button className="btn btn-success" type="submit">
                   Insertar
                 </button>
