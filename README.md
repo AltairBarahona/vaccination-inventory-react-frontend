@@ -2,6 +2,15 @@ App web
 
 https://vaccination-inventory-react-frontend.vercel.app/
 
+Video demostración
+https://youtu.be/6-1i34ehb9E
+
+Github Frontend
+https://github.com/AltairBarahona/vaccination-inventory-react-frontend
+
+Github Backend
+https://github.com/AltairBarahona/vaccination-inventory-interview-backend
+
 Estos fueron los pasos para desarrollar esta aplicación:
 
 Se desarrolló el backend con node, express js
