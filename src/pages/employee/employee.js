@@ -188,9 +188,17 @@ class Employee extends Component {
       form: {
         id: employee.id,
         identificationNumber: employee.identificationNumber,
-        name: employee.name,
+        firstName: employee.firstName,
         secondName: employee.secondName,
+        paternalSurname: employee.paternalSurname,
+        maternalSurname: employee.maternalSurname,
         email: employee.email,
+        bornDate: employee.bornDate,
+        address: employee.address,
+        phone: employee.phone,
+        vaccinationState: employee.vaccinationState,
+        vaccineType: employee.vaccineType,
+        dosesNumber: employee.dosesNumber,
       },
     });
   };
