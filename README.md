@@ -1,3 +1,7 @@
+App web
+
+https://vaccination-inventory-react-frontend.vercel.app/
+
 Estos fueron los pasos para desarrollar esta aplicación:
 
 Se desarrolló el backend con node, express js
@@ -12,7 +16,7 @@ https://vaccination-inventory-backend.herokuapp.com
 
 Credenciales Admin
 User: altair.profesional@gmail.com
-Password: 62F481
+Password: 62F4EF
 
 El orden del desarrollo fue el siguiente:
 
@@ -37,20 +41,3 @@ El orden del desarrollo fue el siguiente:
    Diseño
    Lógica de inicio de sesión con backend
    Lógica de rutas
-
-Opciones para la ejecución de la aplicación
-
-1 Entrar a
-
-2 Descargar el código del frontend desde
-instalar dependencias
-npm install
-cambiar los endpoints por localhost en el código
-ejecutar la app
-npm start
-
-Descargar el cógido del backend desde
-instalar dependencias
-npm install
-ejecutar backend
-npm run start:dev
