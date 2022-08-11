@@ -17,18 +17,14 @@ const cookies = new Cookies();
 
 /* The above code is defining the URL's for the API calls. */
 
-const urlGetUsers = "http://localhost:3002/api/users/getAllUsers";
-const urlUpdateUser = "http://localhost:3002/api/users/updateUser";
+// const urlGetUsers = "http://localhost:3002/api/users/getAllUsers";
+// const urlUpdateUser = "http://localhost:3002/api/users/updateUser";
 
-// const urlGetUsers =
-//   "https://vaccination-inventory-backend.herokuapp.com/api/users/getAllUsers";
+const urlGetUsers =
+  "https://vaccination-inventory-backend.herokuapp.com/api/users/getAllUsers";
 
-// const urlCreateUser =
-//   "https://vaccination-inventory-backend.herokuapp.com/api/users/createUser";
-// const urlUpdateUser =
-//   "https://vaccination-inventory-backend.herokuapp.com/api/users/updateUser";
-// const urlDeleteUser =
-//   "https://vaccination-inventory-backend.herokuapp.com/api/users/deleteUser";
+const urlUpdateUser =
+  "https://vaccination-inventory-backend.herokuapp.com/api/users/updateUser";
 
 class Employee extends Component {
   /* Creating a state object */
