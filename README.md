@@ -10,6 +10,10 @@ La app de React se desplegó mediante Vercel
 El backend se desplegó mediante Heroku
 https://vaccination-inventory-backend.herokuapp.com
 
+Credenciales Admin
+User: altair.profesional@gmail.com
+Password: 62F481
+
 El orden del desarrollo fue el siguiente:
 
 1. Creación de estructura de carpetas pages, routes

@@ -142,8 +142,8 @@ class Employee extends Component {
           this.state.form
         )
         .then((response) => {
-          // this.modalInsertar();
-          // this.peticionGet();
+          this.modalInsertar();
+          this.peticionGet();
         });
     } catch (error) {
       event.preventDefault();
