@@ -8,6 +8,7 @@ crear, listar, actualizar y eliminar usuarios, al igual que para el login
 
 La app de React se desplegó mediante Vercel
 El backend se desplegó mediante Heroku
+https://vaccination-inventory-backend.herokuapp.com
 
 El orden del desarrollo fue el siguiente:
 

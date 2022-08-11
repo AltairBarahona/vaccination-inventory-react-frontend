@@ -5,7 +5,10 @@ import "./login.css";
 import { Col, Container, Row } from "reactstrap";
 
 /* Login backend url */
-const baseUrl = "http://localhost:3001/api/users/login";
+// const baseUrl = "http://localhost:3001/api/users/login";
+const baseUrl =
+  "https://vaccination-inventory-backend.herokuapp.com/api/users/login";
+
 /* Session cookies */
 const cookies = new Cookies();
 
@@ -81,17 +84,8 @@ class Login extends Component {
     if (cookies.get("role") === "ADMIN") {
       window.location.href = "./admin";
     }
-
     if (cookies.get("role") === "EMPLOYEE") {
       window.location.href = "./employee";
-    }
-
-    if (
-      cookies.get("role") === "" ||
-      cookies.get("role") === undefined ||
-      cookies.get("role") === null
-    ) {
-      window.location.href = "./";
     }
   }
 

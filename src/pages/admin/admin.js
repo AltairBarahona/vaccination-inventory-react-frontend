@@ -19,10 +19,21 @@ import Cookies from "universal-cookie";
 const cookies = new Cookies();
 
 /* The above code is defining the URL's for the API calls. */
-const urlGetUsers = "http://localhost:3001/api/users/getAllUsers";
-const urlCreateUser = "http://localhost:3001/api/users/createUser";
-const urlUpdateUser = "http://localhost:3001/api/users/updateUser";
-const urlDeleteUser = "http://localhost:3001/api/users/deleteUser";
+// const urlGetUsers = "http://localhost:3001/api/users/getAllUsers";
+// const urlCreateUser = "http://localhost:3001/api/users/createUser";
+// const urlUpdateUser = "http://localhost:3001/api/users/updateUser";
+// const urlDeleteUser = "http://localhost:3001/api/users/deleteUser";
+// https://vaccination-inventory-backend.herokuapp.com
+
+const urlGetUsers =
+  "https://vaccination-inventory-backend.herokuapp.com/api/users/getAllUsers";
+
+const urlCreateUser =
+  "https://vaccination-inventory-backend.herokuapp.com/api/users/createUser";
+const urlUpdateUser =
+  "https://vaccination-inventory-backend.herokuapp.com/api/users/updateUser";
+const urlDeleteUser =
+  "https://vaccination-inventory-backend.herokuapp.com/api/users/deleteUser";
 
 class Admin extends Component {
   /* Creating a state object */
