@@ -1,24 +1,34 @@
-.containerPrincipal {
+.container-principal {
     padding: 5rem 2.5rem;
-    border: 1px solid blue;
-    background-color: white;
     width: 90%;
+    background-color: white;
 }
-
-.containerSecundario {
+.container-secundario {
     text-align: center;
+
 }
-.positionRelative {
+.position-relative {
     height: 100vh;
     position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
+    background:linear-gradient(90deg,#f8570f,#ec7d2c,#f8570f);
+
 }
-.backgroundImage {
+.background-image {
     background-image: url('https://pbs.twimg.com/media/FOerC7XWQAI7kNW?format=jpg&name=large');
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
-    /* height: 100vh; */
+}
+.kruger-gif-img {
+    background-image: url('https://krugercorp.com/wp-content/uploads/2022/02/2.gif');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 25vh;
+}
+.login-inputs-font-size {
+    padding: 0 30% 0 30%;
 }

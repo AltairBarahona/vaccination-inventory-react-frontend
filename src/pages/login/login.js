@@ -4,10 +4,13 @@ import Cookies from "universal-cookie";
 import "./login.css";
 import { Col, Container, Row } from "reactstrap";
 
+/* Login backend url */
 const baseUrl = "http://localhost:3001/api/users/login";
+/* Session cookies */
 const cookies = new Cookies();
 
 class Login extends Component {
+  /*Initial state of Login component */
   state = {
     form: {
       username: "",
@@ -15,6 +18,7 @@ class Login extends Component {
     },
   };
 
+  /*Persist changes in state */
   handleLoginFormChange = async (event) => {
     await this.setState({
       form: {
@@ -24,16 +28,13 @@ class Login extends Component {
     });
     console.log(this.state.form);
   };
-
+  /*Login function. If success, save session cookies that will be used in the next page (redirect to admin or employee page)*/
   login = async () => {
     await axios
-      .get(
-        baseUrl +
-          "/" +
-          this.state.form.username +
-          "/" +
-          this.state.form.password
-      )
+      .post(baseUrl, {
+        username: this.state.form.username,
+        password: this.state.form.password,
+      })
       .then((response) => {
         return response.data;
       })
@@ -41,67 +42,103 @@ class Login extends Component {
         console.log(response);
         if (response.success) {
           cookies.set("id", response.data.id, { path: "/" });
-          cookies.set("name", response.data.name, { path: "/" });
-          cookies.set("lastName", response.data.lastName, { path: "/" });
+          cookies.set("firstName", response.data.firstName, { path: "/" });
+          cookies.set("secondName", response.data.secondName, { path: "/" });
+          cookies.set("paternalSurname", response.data.paternalSurname, {
+            path: "/",
+          });
+          cookies.set("maternalSurname", response.data.maternalSurname, {
+            path: "/",
+          });
           cookies.set("email", response.data.email, { path: "/" });
+          cookies.set("role", response.data.role, { path: "/" });
           alert(
-            "Bienvenido " + response.data.name + " " + response.data.lastName
+            "Bienvenido " +
+              response.data.firstName +
+              " " +
+              response.data.paternalSurname +
+              " " +
+              response.data.role
           );
-          window.location.href = "./admin";
+          /*Redirect to specific page according to user role */
+          if (response.data.role === "ADMIN") {
+            window.location.href = "./admin";
+          }
+          if (response.data.role === "EMPLOYEE") {
+            window.location.href = "./employee";
+          }
         } else {
-          alert("Usuario o contraseña incorrectos");
+          alert("Wrong username or password");
         }
       })
       .catch((error) => {
-        console.log("ESTADO======", this.state.form);
-
-        console.log(error.message);
+        console.log(error);
+        alert(error.response?.data?.message);
       });
   };
-
+  /*Life cycle, check if there is a role cookie */
   componentDidMount() {
-    if (cookies.get("id")) {
+    if (cookies.get("role") === "ADMIN") {
       window.location.href = "./admin";
+    }
+
+    if (cookies.get("role") === "EMPLOYEE") {
+      window.location.href = "./employee";
+    }
+
+    if (
+      cookies.get("role") === "" ||
+      cookies.get("role") === undefined ||
+      cookies.get("role") === null
+    ) {
+      window.location.href = "./";
     }
   }
 
   render() {
     return (
+      /*Divide screen in two */
       <Container fluid>
         <Row>
-          <Col md={6} className="backgroundImage"></Col>
+          {/* left kruger image */}
+          <Col md={6} className="background-image"></Col>
 
-          <Col md={6} className="positionRelative">
-            <div className="containerPrincipal">
-              <div className="containerSecundario">
+          {/* right login form */}
+          <Col md={6} className="position-relative">
+            <div className="container-principal">
+              <div className="kruger-gif-img"></div>
+              <div className="container-secundario">
                 <div className="form-group">
-                  <h2>Usuario</h2>
-                  <br />
-                  <br />
-                  <input
-                    className="form-control"
-                    type="text"
-                    name="username"
-                    onChange={this.handleLoginFormChange}
-                  />
-                  <br />
-                  <br />
-                  <h2>Contraseña: </h2>
                   <br />
                   <br />
 
-                  <input
-                    className="form-control"
-                    type="password"
-                    name="password"
-                    onChange={this.handleLoginFormChange}
-                  />
+                  <h4 className="text-align-right">Usuario</h4>
+                  <div className="login-inputs-font-size">
+                    <input
+                      className="form-control"
+                      type="text"
+                      name="username"
+                      onChange={this.handleLoginFormChange}
+                    />
+                  </div>
+
+                  <br />
+                  <br />
+                  <h4>Contraseña: </h4>
+                  <div className="login-inputs-font-size">
+                    <input
+                      className="form-control"
+                      type="password"
+                      name="password"
+                      onChange={this.handleLoginFormChange}
+                    />
+                  </div>
+
                   <br />
                   <button
                     className="btn btn-primary"
                     onClick={() => this.login()}
                   >
-                    {" "}
                     Iniciar sesión
                   </button>
                 </div>

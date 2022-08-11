@@ -1,7 +1,5 @@
 import React, { Component } from "react";
 import axios from "axios";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import {
   Col,
   Container,
@@ -12,20 +10,21 @@ import {
   Row,
   Table,
 } from "reactstrap";
-import "./admin.css";
+import "./employee.css";
 import Cookies from "universal-cookie";
 
-/* Creating a new instance of the Cookies class. */
 const cookies = new Cookies();
 
 /* The above code is defining the URL's for the API calls. */
+
 const urlGetUsers = "http://localhost:3001/api/users/getAllUsers";
 const urlCreateUser = "http://localhost:3001/api/users/createUser";
 const urlUpdateUser = "http://localhost:3001/api/users/updateUser";
 const urlDeleteUser = "http://localhost:3001/api/users/deleteUser";
 
-class Admin extends Component {
+class Employee extends Component {
   /* Creating a state object */
+
   state = {
     data: [],
     modalInsertar: false,
@@ -47,8 +46,8 @@ class Admin extends Component {
       dosesNumber: 0,
     },
   };
-
   /* Making a GET request to the urlGetUsers endpoint for load all users. */
+
   peticionGet = () => {
     delete this.state.form.id;
     axios
@@ -61,20 +60,21 @@ class Admin extends Component {
       });
   };
   /* Checking if the string is valid, only char characters, not numbers or rare symbols. */
+
   validString = (string) => {
     const isValid = /^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]*$/.test(string);
     return isValid;
   };
-
   /* Function for open the modal for insert a new user. */
+
   peticionPost = async (event) => {
-    /* Validate if email is valid with regex (check @ and . format) */
     const validEmail = String(this.state.form.email)
       .toLowerCase()
       .match(
         /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
       );
-    /* Validate if names and surnames don´t have numbers or rare symbols */
+    /* Validate if email is valid with regex (check @ and . format) */
+
     const validFirstName = this.validString(this.state.form.firstName);
     const validSecondName = this.validString(this.state.form.secondName);
     const validPaternalSurname = this.validString(
@@ -106,6 +106,7 @@ class Admin extends Component {
       return;
     }
     /* If data has a correct format, do the http request to create user*/
+
     await axios
       .post(urlCreateUser, this.state.form)
       .then((response) => {
@@ -113,12 +114,14 @@ class Admin extends Component {
         this.peticionGet();
       })
       .catch((error) => {
-        event.preventDefault();
-
         console.log(error.message);
+      })
+      .finally(() => {
+        this.modalInsertar();
       });
   };
-  /* Function for open the modal for update a user. */
+
+  /* Function for open the modal for update my information. */
   peticionPut = async (event) => {
     try {
       await axios
@@ -129,8 +132,8 @@ class Admin extends Component {
           this.state.form
         )
         .then((response) => {
-          this.modalInsertar();
-          this.peticionGet();
+          // this.modalInsertar();
+          // this.peticionGet();
         });
     } catch (error) {
       event.preventDefault();
@@ -139,6 +142,7 @@ class Admin extends Component {
     }
   };
   /* Function for open the modal for delete a user. */
+
   peticionDelete = async () => {
     await axios
       .delete(urlDeleteUser + "/" + this.state.form.id)
@@ -150,37 +154,39 @@ class Admin extends Component {
         console.log(error.message);
       });
   };
+
   /* Function for open or close the modal according to state. */
   modalInsertar = () => {
     this.setState({ modalInsertar: !this.state.modalInsertar });
   };
 
   handleModalChange = async (event) => {
+    //validate required fields
+
     event.persist();
     await this.setState({
       form: {
-        ...this.state.form,
-        [event.target.name]: event.target.value, //save in state according to input name
+        ...this.state.form, //heredar atributos del form que no se borren cuando el usuario escriba
+        [event.target.name]: event.target.value, //guardar en el estado de acuerdo al nombre del input
       },
     });
+    console.log(this.state.form);
   };
-  /* Function for persist user employee data in modal*/
   selectEmployee = (employee) => {
     this.setState({
       tipoModal: "update",
       form: {
         id: employee.id,
         identificationNumber: employee.identificationNumber,
-        firstName: employee.firstName,
+        name: employee.name,
         secondName: employee.secondName,
-        paternalSurname: employee.paternalSurname,
-        maternalSurname: employee.maternalSurname,
         email: employee.email,
       },
     });
   };
 
-  /* Removing cookies from the browser. */
+  /* Removing the cookies from the browser. */
+
   logout = () => {
     cookies.remove("id", { path: "/" });
     cookies.remove("firstName", { path: "/" });
@@ -191,7 +197,7 @@ class Admin extends Component {
     cookies.remove("role", { path: "/" });
     window.location.href = "./";
   };
-  /*Go to root page it there is no id cookie */
+
   componentDidMount() {
     if (!cookies.get("id")) {
       window.location.href = "./";
@@ -205,13 +211,13 @@ class Admin extends Component {
 
     return (
       <div>
-        <header className="header-background-img text-center">
+        <div className="header-background-img text-center">
           <img
             className="header-img"
             src="https://krugercorp.com/wp-content/uploads/2022/02/logo_kruger_english.png"
             alt="header"
           />
-        </header>
+        </div>
         <div>
           <br />
           <br />
@@ -226,7 +232,7 @@ class Admin extends Component {
               this.modalInsertar();
             }}
           >
-            Register employee
+            Update my information
           </button>
         </div>
         <br></br>
@@ -236,8 +242,6 @@ class Admin extends Component {
               <Table responsive striped bordered hover>
                 <thead>
                   <tr>
-                    <th>ID</th>
-                    <th>Identification number (CI)</th>
                     <th>First Name</th>
                     <th>Second Name</th>
                     <th>Paternal surname </th>
@@ -253,48 +257,25 @@ class Admin extends Component {
                 </thead>
                 <tbody>
                   {this.state.data.map((user, index) => {
-                    return (
-                      <tr key={index}>
-                        <td>{user.id}</td>
-                        <td>{user.identificationNumber}</td>
-                        <td>{user.firstName}</td>
-                        <td>{user.secondName}</td>
-                        <td>{user.paternalSurname}</td>
-                        <td>{user.maternalSurname}</td>
-                        <td>{user.email}</td>
-                        <td>{user.bornDate}</td>
-                        <td>{user.address}</td>
-                        <td>{user.phone}</td>
-                        <td>{user.vaccinationState}</td>
-                        <td>{user.vaccineType}</td>
-                        <td>{user.dosesNumber}</td>
-                        <td>
-                          <div className="buttonMargin">
-                            <button
-                              className="btn btn-primary"
-                              onClick={() => {
-                                this.selectEmployee(user);
-                                this.modalInsertar();
-                              }}
-                            >
-                              <FontAwesomeIcon icon={faEdit} />
-                            </button>
-                          </div>
-
-                          <div className="buttonMargin">
-                            <button
-                              className="btn btn-danger"
-                              onClick={() => {
-                                this.selectEmployee(user);
-                                this.setState({ modalEliminar: true });
-                              }}
-                            >
-                              <FontAwesomeIcon icon={faTrashAlt} />
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    );
+                    if (user.id === cookies.get("id")) {
+                      return (
+                        <tr key={index}>
+                          <td>{user.firstName}</td>
+                          <td>{user.secondName}</td>
+                          <td>{user.paternalSurname}</td>
+                          <td>{user.maternalSurname}</td>
+                          <td>{user.email}</td>
+                          <td>{user.bornDate}</td>
+                          <td>{user.address}</td>
+                          <td>{user.phone}</td>
+                          <td>{user.vaccinationState}</td>
+                          <td>{user.vaccineType}</td>
+                          <td>{user.dosesNumber}</td>
+                        </tr>
+                      );
+                    } else {
+                      return <div></div>;
+                    }
                   })}
                 </tbody>
               </Table>
@@ -327,77 +308,79 @@ class Admin extends Component {
               <div className="form-group">
                 <br />
 
-                <label htmlFor="identificationNumber">
-                  Identification Number
-                </label>
+                <label htmlFor="bornDate">Born date</label>
+                <input
+                  required
+                  className="form-control"
+                  type="date"
+                  name="bornDate"
+                  id="bornDate"
+                  onChange={this.handleModalChange}
+                  //validate required input
+                  value={form ? form.bornDate : ""}
+                />
+
+                <br />
+
+                <label htmlFor="address">Address</label>
+                <input
+                  required
+                  className="form-control"
+                  type="text"
+                  name="address"
+                  id="address"
+                  onChange={this.handleModalChange}
+                  value={form ? form.address : ""}
+                />
+                <br />
+
+                <label htmlFor="phone">Phone</label>
                 <input
                   required
                   className="form-control"
                   type="number"
-                  name="identificationNumber"
-                  id="identificationNumber"
+                  name="phone"
+                  id="phone"
                   onChange={this.handleModalChange}
-                  //validate required input
-                  value={form ? form.identificationNumber : ""}
+                  value={form ? form.phone : ""}
                 />
-
                 <br />
 
-                <label htmlFor="firstName">First name</label>
+                <div class="form-check form-switch">
+                  <label class="vaccinationState" for="flexSwitchCheckDefault">
+                    Vaccinated
+                  </label>
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    name="vaccinationState"
+                    id="vaccinationState"
+                    onChange={this.handleModalChange}
+                    value={form ? form.vaccinationState : ""}
+                  />
+                </div>
+
+                <br />
+                <label htmlFor="vaccineType">Vaccine type</label>
                 <input
                   required
                   className="form-control"
                   type="text"
-                  name="firstName"
-                  id="firstName"
+                  name="vaccineType"
+                  id="vaccineType"
                   onChange={this.handleModalChange}
-                  value={form ? form.firstName : ""}
+                  value={form ? form.vaccineType : ""}
                 />
                 <br />
-
-                <label htmlFor="secondName">Second name</label>
+                <label htmlFor="dosesNumber">Doses number</label>
                 <input
                   required
                   className="form-control"
-                  type="text"
-                  name="secondName"
-                  id="secondName"
+                  type="number"
+                  name="dosesNumber"
+                  id="dosesNumber"
                   onChange={this.handleModalChange}
-                  value={form ? form.secondName : ""}
-                />
-                <br />
-                <label htmlFor="paternalSurname">Paternal surname</label>
-                <input
-                  required
-                  className="form-control"
-                  type="text"
-                  name="paternalSurname"
-                  id="paternalSurname"
-                  onChange={this.handleModalChange}
-                  value={form ? form.paternalSurname : ""}
-                />
-                <br />
-                <label htmlFor="maternalSurname">Maternal surname</label>
-                <input
-                  required
-                  className="form-control"
-                  type="text"
-                  name="maternalSurname"
-                  id="maternalSurname"
-                  onChange={this.handleModalChange}
-                  value={form ? form.maternalSurname : ""}
-                />
-                <br />
-
-                <label htmlFor="email">Email</label>
-                <input
-                  required
-                  className="form-control"
-                  type="email"
-                  name="email"
-                  id="email"
-                  onChange={this.handleModalChange}
-                  value={form ? form.email : ""}
+                  value={form ? form.dosesNumber : ""}
                 />
                 <br />
               </div>
@@ -448,4 +431,4 @@ class Admin extends Component {
   }
 }
 
-export default Admin;
+export default Employee;
