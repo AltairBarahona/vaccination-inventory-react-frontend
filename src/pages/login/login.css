@@ -1,0 +1,24 @@
+.containerPrincipal {
+    padding: 5rem 2.5rem;
+    border: 1px solid blue;
+    background-color: white;
+    width: 90%;
+}
+
+.containerSecundario {
+    text-align: center;
+}
+.positionRelative {
+    height: 100vh;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.backgroundImage {
+    background-image: url('https://pbs.twimg.com/media/FOerC7XWQAI7kNW?format=jpg&name=large');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    /* height: 100vh; */
+}
